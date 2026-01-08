@@ -2,6 +2,7 @@
 /Web_01/build/
 /Web_01_b/nbproject/private/
 /Web_01_b/build/
+<<<<<<< HEAD
 /Web_02/nbproject/private/
 /Web_02/build/
 /Web_02_a/nbproject/private/
@@ -14,3 +15,5 @@
 /Web_02_d/nbproject/private/
 /Web_02_d/build/
 /Web_02_d/dist/
+=======
+>>>>>>> 0645ef73706f20c7623a620ca2d1e4ce606149f4
