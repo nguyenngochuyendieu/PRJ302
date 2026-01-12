@@ -6,7 +6,7 @@
     </servlet>
     <servlet>
         <servlet-name>MainController2</servlet-name>
-        <servlet-class>controller.MainController2</servlet-class>
+        <servlet-class>controller.MainController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>

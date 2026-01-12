@@ -6,7 +6,6 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author DELL
  */
-public class MainController2 extends HttpServlet {
+public class MainController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,22 +37,16 @@ public class MainController2 extends HttpServlet {
             out.println("<title>Servlet MainController2</title>");
             out.println("</head>");
             out.println("<body>");
-
+            
             String txtUsername = request.getParameter("txtUsername");
             String txtPassword = request.getParameter("txtPassword");
-
-            String url = "";
-
             if (txtUsername.equalsIgnoreCase("admin")
                     && txtPassword.equals("admin")) {
-                url = "a.jsp";
+                out.println("Dang nhap thanh cong!");
             } else {
-                url = "b.jsp";
+                out.println("Dang nhap that bai! Sai username hoac password.");
             }
-
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
-
+            
             out.println("</body>");
             out.println("</html>");
         }

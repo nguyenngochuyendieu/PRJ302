@@ -6,16 +6,19 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.UserDAO;
+import model.UserDTO;
 
 /**
  *
  * @author DELL
  */
-public class MainController2 extends HttpServlet {
+public class MainController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,24 +34,25 @@ public class MainController2 extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet MainController2</title>");
-            out.println("</head>");
-            out.println("<body>");
-            
+           
             String txtUsername = request.getParameter("txtUsername");
             String txtPassword = request.getParameter("txtPassword");
-            if (txtUsername.equalsIgnoreCase("admin")
-                    && txtPassword.equals("admin")) {
-                out.println("Dang nhap thanh cong!");
+
+            String url = "";
+
+            UserDAO udao = new UserDAO();
+            UserDTO user = udao.login(txtUsername,txtPassword);            
+            if (user!= null) {
+                url = "a.jsp";
+                request.setAttribute("user", user);
             } else {
-                out.println("Dang nhap that bai! Sai username hoac password.");
+                url = "login.jsp";
+                request.setAttribute("message", "Invalid username of password!");
             }
-            
-            out.println("</body>");
-            out.println("</html>");
+
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
+
         }
     }
 
