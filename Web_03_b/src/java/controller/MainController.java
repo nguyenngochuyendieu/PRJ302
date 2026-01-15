@@ -47,6 +47,7 @@ public class MainController extends HttpServlet {
                 request.setAttribute("user", user);
             } else {
                 url = "login.jsp";
+                request.setAttribute("message", "Invalid username or password!");
             }
 
             RequestDispatcher rd = request.getRequestDispatcher(url);
