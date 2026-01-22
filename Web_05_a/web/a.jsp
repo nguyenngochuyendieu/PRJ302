@@ -1,7 +1,7 @@
-"<%-- 
+<%-- 
     Document   : a.jsp
-    Created on : Jan 8, 2026, 4:55:40 PM
-    Author     : DELL
+    Created on : Jan 21, 2026, 6:32:56 PM
+    Author     : dell
 --%>
 
 <%@page import="model.UserDTO"%>
@@ -13,14 +13,13 @@
         <title>JSP Page</title>
     </head>
     <body>
-
         <%
             UserDTO user = (UserDTO)session.getAttribute("user");
 
             if (user != null) {
         %>    
             Welcome <%=user.getFullName()%>, <br/>
-            <a href="MainController2?action=logout">Logout</a> </br>
+            <a href="MainController?action=logout">Logout</a> </br>
             Bang dieu khien <br/>
             Tinh nang 1 <br/>
             Tinh nang 2 <br/>
