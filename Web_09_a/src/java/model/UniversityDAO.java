@@ -18,8 +18,8 @@ public class UniversityDAO {
 
     public UniversityDAO() {
     }
-    
-    public ArrayList<UniversityDTO> searchByColum(String column, String value){
+
+    public ArrayList<UniversityDTO> searchByColum(String column, String value) {
         ArrayList<UniversityDTO> result = new ArrayList<>();
         try {
             Connection conn = DbUtils.getConnection();
@@ -27,20 +27,21 @@ public class UniversityDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, value);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 String id = rs.getString("id");
                 String name = rs.getString("name");
                 String shortName = rs.getString("shortName");
                 String description = rs.getString("description");
-                int foundedYear = rs.getInt("founedYear");
+                int foundedYear = rs.getInt("foundedYear");
                 String address = rs.getString("address");
                 String city = rs.getString("city");
                 String region = rs.getString("region");
                 String type = rs.getString("type");
-                int totalStudents = rs.getInt("totalStudents");
+                int totalStudents = rs.getInt("totalStudent");
                 int totalFaculties = rs.getInt("totalFaculties");
-                
-                UniversityDTO u = new UniversityDTO(id, name, shortName, description, foundedYear, address, city, region, type, totalStudents, totalFaculties, true);
+                boolean isDarft = rs.getBoolean("isDraft");
+
+                UniversityDTO u = new UniversityDTO(id, name, shortName, description, foundedYear, address, city, region, type, totalStudents, totalFaculties, isDarft);
                 result.add(u);
             }
         } catch (Exception e) {
@@ -48,8 +49,8 @@ public class UniversityDAO {
         }
         return result;
     }
-    
-    public ArrayList<UniversityDTO> filterByColum(String column, String value){
+
+    public ArrayList<UniversityDTO> filterByColum(String column, String value) {
         ArrayList<UniversityDTO> result = new ArrayList<>();
         try {
             Connection conn = DbUtils.getConnection();
@@ -58,31 +59,83 @@ public class UniversityDAO {
             ps.setString(1, "%" + value + "%");
             System.out.println(ps.toString());
             ResultSet rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 String id = rs.getString("id");
                 String name = rs.getString("name");
-                String shortName = rs.getString("desctiption");
+                String shortName = rs.getString("shortName");
                 String description = rs.getString("description");
                 int foundedYear = rs.getInt("foundedYear");
-                String address = rs.getString("city");
+                String address = rs.getString("address");
                 String city = rs.getString("city");
                 String region = rs.getString("region");
                 String type = rs.getString("type");
                 int totalStudents = rs.getInt("totalStudents");
                 int totalFaculties = rs.getInt("totalFaculties");
                 boolean isDraft = rs.getBoolean("isDraft");
-                
+
                 UniversityDTO u = new UniversityDTO(id, name, shortName, description, foundedYear, address, city, region, type, totalStudents, totalFaculties, isDraft);
                 result.add(u);
-            }                  
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
-    
-    public ArrayList<UniversityDTO> searchByID(String ID){
-        return searchByColumn("id", ID);
+
+    public UniversityDTO searchByID(String ID) {
+        ArrayList<UniversityDTO> a = searchByColum("id", ID);
+        if(a.size()>0){
+            return a.get(0);
+        }
+        return null;
     }
-    
+
+    public ArrayList<UniversityDTO> searchByName(String name) {
+        return searchByColum("name", name);
+    }
+
+    public ArrayList<UniversityDTO> filterByName(String name) {
+        return filterByColum("name", name);
+    }
+
+    public boolean softDelete(String id) {
+        try {
+            Connection conn = DbUtils.getConnection();
+            String sql = "UPDATE tblUniversity SET status=0 WHERE id=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, id);
+            System.out.println(id + "-" + sql);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean add(UniversityDTO u) {
+        int result = 0;
+        try {
+            Connection conn = DbUtils.getConnection();
+            String sql = "INSERT into tblUniversity values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, u.getId());
+            ps.setString(2, u.getName());
+            ps.setString(3, u.getShortName());
+            ps.setString(4, u.getDescription());
+            ps.setInt(5, u.getFoundedYear());
+            ps.setString(6, u.getAddress());
+            ps.setString(7, u.getCity());
+            ps.setString(8, u.getRegion());
+            ps.setString(9, u.getType());
+            ps.setInt(10, u.getTotalStudents());
+            ps.setInt(11, u.getTotalFaculties());
+            ps.setBoolean(12, u.isIsDraft());
+            ps.setBoolean(13, true);
+            result = ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return result>0;
+    }
 }
